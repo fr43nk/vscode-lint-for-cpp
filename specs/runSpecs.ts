@@ -16,7 +16,7 @@ async function main() {
         // Passed to --extensionTestsPath
         const extensionTestsPath = path.resolve(__dirname, './index');
 
-        const vscodeExecutablePath = await downloadAndUnzipVSCode('1.62.2');
+        const vscodeExecutablePath = await downloadAndUnzipVSCode('1.100.2');
         const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
         // Install the C/C++ base tools

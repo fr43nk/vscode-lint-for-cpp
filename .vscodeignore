@@ -26,3 +26,4 @@ node_modules/**
 *.pdf
 cppcheck-*
 *.patch
+assets/logo.afdesign
