@@ -38,8 +38,8 @@ jobs:
           - macos-latest
           # - windows-latest
         node:
-          - 16
-          - 18
+          - 22
+          - 24
     outputs:
       vsixPath: ${{ steps.packageExtension.outputs.vsixPath }}
     steps:
