@@ -25,7 +25,7 @@
   "homepage": "https://github.com/fr43nk/vscode-lint-for-cpp/blob/main/README.md",
   "main": "./client/out/extension",
   "engines": {
-    "vscode": "^1.52.0"
+    "vscode": "^1.96.0"
   },
   "categories": [
     "Programming Languages",
