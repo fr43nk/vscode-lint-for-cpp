@@ -1,0 +1,165 @@
+name: Build, Analyze, Test and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  schedule:
+    - cron: "30 5 * * 1"
+
+env:
+  CC_TEST_REPORTER_ID: 841d8434027b80ebe04ecbf7823df79314cbda58af076e88bdc7c53693c7640b
+
+jobs:
+  legal:
+    name: REUSE Specification
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v1
+
+  build-lint-test:
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    needs: legal
+    timeout-minutes: 10
+    strategy:
+      fail-fast: true
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          # - windows-latest
+        node:
+          - 16
+          - 18
+    outputs:
+      vsixPath: ${{ steps.packageExtension.outputs.vsixPath }}
+    steps:
+      - name: Setup GIT for Windows
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+        if: runner.os == 'Windows'
+      - name: Ensure xvfb package exists for Linux
+        run: sudo apt install -yqq xvfb
+        if: runner.os == 'Linux'
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Install Node ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Linter
+        run: npm run lint
+      - name: Build Code
+        run: npm run compile
+      - name: Run Unit Tests on Windows or macOS
+        run: npm run test
+        if: runner.os != 'Linux'
+      - name: Run Unit Tests on Linux
+        run: xvfb-run "--server-args=-screen 0 1024x768x24" -a npm test
+        if: runner.os == 'Linux'
+      - name: Update Coverage Report to Code Climate
+        run: |
+            if test `uname -s` = "Linux"; then
+              curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            else
+              curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-darwin-amd64 > ./cc-test-reporter
+            fi
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter format-coverage -t lcov -o coverage/codeclimate.${{ matrix.os }}-node${{ matrix.node }}.json coverage/lcov.info
+            cp -vp coverage/codeclimate.${{ matrix.os }}-node${{ matrix.node }}.json .
+      - name: Upload Coverage as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-${{ matrix.os }}-node${{ matrix.node }}
+          path: codeclimate.${{ matrix.os }}-node${{ matrix.node }}.json
+      - name: Upload Coverage Report to Coveralls
+        uses: coverallsapp/github-action@v1.2.5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+          flag-name: Test node ${{ matrix.node }} on ${{ matrix.os }}
+      - name: Package Extension
+        id: packageExtension
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: stub
+          dryRun: true
+      - name: Upload Extension Package as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}
+          path: ${{ steps.packageExtension.outputs.vsixPath }}
+
+  coverage:
+    name: Code Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build-lint-test
+    steps:
+      - name: Let Coveralls know that all tests have finished
+        uses: coverallsapp/github-action@v1.2.5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2
+      - name: Update the Coverage Report on Code Climate
+        run: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter sum-coverage coverage*/codeclimate.*.json -p 4
+            ./cc-test-reporter upload-coverage
+
+  publish:
+    name: Publish
+    needs:
+      - build-lint-test
+      - coverage
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: REUSE Compliance Check
+        uses: fsfe/reuse-action@v1
+      - name: Install Node v16
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Install Dependencies
+        run: npm ci
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ubuntu-latest
+      - name: GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          discussion_category_name: Announcements
+          fail_on_unmatched_files: true
+          files: ${{ needs.build-lint-test.outputs.vsixPath }}
+      - name: Publish to Visual Studio Marketplace
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.VSCE_TOKEN }}
+          extensionFile: ${{ needs.build-lint-test.outputs.vsixPath }}
+          registryUrl: https://marketplace.visualstudio.com
+      - name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@v1
+        with:
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
+          extensionFile: ${{ needs.build-lint-test.outputs.vsixPath }}

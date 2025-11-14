@@ -1,3 +1,11 @@
+/scratchfile.*
+/*.log
 node_modules
-specs/out
-server/out
+/dist
+**/out/*
+/*.patch
+/cppcheck-*
+*.vsix
+*.pdf
+/.vscode-test
+/coverage
