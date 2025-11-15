@@ -6,6 +6,17 @@ import { downloadAndUnzipVSCode, resolveCliPathFromVSCodeExecutablePath, runTest
 import * as cp from 'child_process';
 import * as path from 'path';
 
+function getPlatform(){
+    switch(process.platform){
+        case 'darwin':
+            return `${process.platform}-arm64`;
+        case 'win32':
+            return `${process.platform}-x86`;
+        default:
+            return `${process.platform}-x64`;
+    }
+}
+
 async function main() {
     try {
         // The folder containing the Extension Manifest package.json
@@ -16,7 +27,9 @@ async function main() {
         // Passed to --extensionTestsPath
         const extensionTestsPath = path.resolve(__dirname, './index');
 
-        const vscodeExecutablePath = await downloadAndUnzipVSCode('1.100.2');
+        const platform = getPlatform();
+
+        const vscodeExecutablePath = await downloadAndUnzipVSCode(`1.100.2`, platform);
         const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
 
         // Install the C/C++ base tools

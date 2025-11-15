@@ -114,8 +114,6 @@
     "which": "^2.0.2"
   },
   "activationEvents": [
-    "onCommand:c-cpp-flylint.analyzeActiveDocument",
-    "onCommand:c-cpp-flylint.analyzeWorkspace",
     "onLanguage:c",
     "onLanguage:cpp"
   ],
