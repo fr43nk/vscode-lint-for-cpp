@@ -1,11 +1,11 @@
 {
-  "name": "c-cpp-flylint-server",
-  "description": "C/C++ Advanced Lint: Server",
-  "version": "1.15.0",
+  "name": "lint-for-cpp-server",
+  "description": "C/C++ Lint Adapter: Server",
+  "version": "1.0.0",
   "author": {
-    "name": "Joseph Benden",
-    "email": "joe@benden.us",
-    "url": "http://benden.us/"
+    "name": "Frank",
+    "email": "dev@seito.de",
+    "url": "http://seito.de"
   },
   "license": "MIT",
   "private": true,
