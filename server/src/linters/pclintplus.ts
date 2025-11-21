@@ -67,7 +67,11 @@ export class PclintPlus extends Linter {
             return null;
         }
 
+        // eslint-disable-next-line no-console
+        console.log(`PclintPlus.parseLine ${line}`);
         if ((regexArray = regex.exec(line)) !== null) {
+            // eslint-disable-next-line no-console
+            console.log(`PclintPlus.parseLine ${regexArray} ${line}`);
             if (_.every([regexArray[3], regexArray[4], regexArray[5]], el => el !== undefined)) {
                 if (_.isUndefined(regexArray[2])) {
                     regexArray[2] = this.lastParse.fileName;
@@ -133,6 +137,8 @@ export class PclintPlus extends Linter {
     }
 
     private getSeverityCode(severity: string): DiagnosticSeverity {
+        // eslint-disable-next-line no-console
+        console.log(`PclintPlus.getSeverityCode ${severity}`);
         let output = this.settings.pclintplus.severityLevels[severity as keyof PclintPlusSeverityMaps];
         return VS_DiagnosticSeverity.from(output);
     }

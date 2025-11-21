@@ -14,7 +14,7 @@ import { PclintPlus } from '../../server/src/linters/pclintplus';
 import { Settings } from '../../server/src/settings';
 import { defaultConfig } from '../mock-config';
 import { injectMockFileSystem } from '../mock-fs';
-import { FLYLINT_ID } from '../../server/src/server';
+import { LINTFORCPP_ID } from '../../server/src/server';
 
 describe('Analyser executables', () => {
     injectMockFileSystem();

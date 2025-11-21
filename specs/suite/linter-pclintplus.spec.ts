@@ -9,7 +9,7 @@ import { PclintPlus } from '../../server/src/linters/pclintplus';
 import { Settings } from '../../server/src/settings';
 import { defaultConfig } from '../mock-config';
 import { injectMockFileSystem } from '../mock-fs';
-import { FLYLINT_ID } from '../../server/src/server';
+import { LINTFORCPP_ID } from '../../server/src/server';
 
 describe('PCLint Plus parser', () => {
     injectMockFileSystem();
@@ -18,7 +18,7 @@ describe('PCLint Plus parser', () => {
     let linter: Linter;
 
     beforeEach(() => {
-        config = cloneDeep(defaultConfig[FLYLINT_ID]);
+        config = cloneDeep(defaultConfig[LINTFORCPP_ID]);
         linter = new PclintPlus(config, process.cwd());
     });
 

@@ -2,15 +2,15 @@
 {
     "cSpell.enabled": false,
     "editor.formatOnSave": true,
-    "c-cpp-flylint.clang.enable": true,
-    "c-cpp-flylint.clang.executable": "clang",
-    "c-cpp-flylint.cppcheck.enable": false,
-    "c-cpp-flylint.cppcheck.force": true,
-    // "c-cpp-flylint.cppcheck.extraArgs": ["-j", "6"],
-    "c-cpp-flylint.debug": true,
-    "c-cpp-flylint.flexelint.executable": "/home/jbenden/Source/FlexeLint_Workstation/flexelint8/src/flexelint",
-    "c-cpp-flylint.flexelint.enable": false,
-    "c-cpp-flylint.pclintplus.enable": true,
+    "lint-for-cpp.clang.enable": true,
+    "lint-for-cpp.clang.executable": "clang",
+    "lint-for-cpp.cppcheck.enable": false,
+    "lint-for-cpp.cppcheck.force": true,
+    // "lint-for-cpp.cppcheck.extraArgs": ["-j", "6"],
+    "lint-for-cpp.debug": true,
+    "lint-for-cpp.flexelint.executable": "/home/jbenden/Source/FlexeLint_Workstation/flexelint8/src/flexelint",
+    "lint-for-cpp.flexelint.enable": false,
+    "lint-for-cpp.pclintplus.enable": true,
     "files.associations": {
         "*.rst": "restructuredtext",
         "rsync.h": "c",
@@ -34,11 +34,11 @@
         "**/*-tstamp": true,
         "**/{GPATH,GRTAGS,GTAGS}": true
     },
-    "c-cpp-flylint.run": "onSave",
-    "c-cpp-flylint.pclintplus.enable": false,
-    "c-cpp-flylint.pclintplus.executable": "/bin/echo1",
-    "c-cpp-flylint.pclintplus.configFile": ".flexelint.lnt",
-    "c-cpp-flylint.excludeFromWorkspacePaths": [
+    "lint-for-cpp.run": "onSave",
+    "lint-for-cpp.pclintplus.enable": false,
+    "lint-for-cpp.pclintplus.executable": "/bin/echo1",
+    "lint-for-cpp.pclintplus.configFile": ".flexelint.lnt",
+    "lint-for-cpp.excludeFromWorkspacePaths": [
         ".git",
         "${workspaceRoot}/include/hal"
     ]

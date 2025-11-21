@@ -62,7 +62,7 @@ describe('c_cpp_properties.json unit-tests', () => {
             return (await RobustPromises.retry(42, // # of attempts
                 1000, // delay between retries
                 1000, // timeout for a try
-                () => vscode.commands.executeCommand('c-cpp-flylint.getLocalConfig', document))) as Settings;
+                () => vscode.commands.executeCommand('lint-for-cpp.getLocalConfig', document))) as Settings;
         }
 
         test('it should handle non-existing includePaths setting', async () => {

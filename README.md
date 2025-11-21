@@ -41,7 +41,7 @@ analyzers; and will attempt to locate them within your `PATH`
 environment variable.
 
 If a tool is not automatically found, the appropriate
-`c-cpp-flylint.*.executable` configuration must be specified manually.
+`lint-for-cpp.*.executable` configuration must be specified manually.
 
 <details>
 <summary>Debian & Ubuntu</summary>
@@ -100,7 +100,7 @@ from the listed URLs mentioned elsewhere in this documentation.
 
 If PC-lint has been installed, be certain to use the `Flexelint`
 configuration sections, specifying the full path and filename
-of PC-lint as the `c-cpp-flylint.flexelint.executable`
+of PC-lint as the `lint-for-cpp.flexelint.executable`
 configuration option.
 
 </details>
@@ -136,8 +136,8 @@ necessary build/compiler flags, as needed by most of the linters.
 
 This extension runs a few third-party command-line tools found from the
 locations determined by the `PATH` or `Path` environment variable, and
-the settings such as `"c-cpp-flylint.clang.executable"` or
-`"c-cpp-flylint.cppcheck.executable"`. Configuring them in workspace
+the settings such as `"lint-for-cpp.clang.executable"` or
+`"lint-for-cpp.cppcheck.executable"`. Configuring them in workspace
 settings allows users to conveniently select a different set of tools
 based on project's need, but also allows attackers to run arbitrary
 binaries on your machine if they successfully convince you to open a
@@ -145,7 +145,7 @@ random repository. In order to reduce the security risk, this extension
 reads the settings from user settings, by default. If the repository can
 be trusted and workspace settings must be used, you can mark the
 workspace as a trusted workspace using the
-`"C/C++ Flylint: Toggle Workspace Trust Flag"` command.
+`"Lint for C++: Toggle Workspace Trust Flag"` command.
 
 ### Configuration Settings
 

@@ -15,7 +15,7 @@ import * as path from 'path';
 import { getFromWorkspaceState, resetWorkspaceState, setWorkspaceState, updateWorkspaceState } from './stateUtils';
 import { isBoolean } from 'lodash';
 
-const FLYLINT_ID: string = 'c-cpp-flylint';
+const LINTFORCPP_ID: string = 'lint-for-cpp';
 
 const WORKSPACE_IS_TRUSTED_KEY = 'WORKSPACE_IS_TRUSTED_KEY';
 const SECURITY_SENSITIVE_CONFIG: string[] = [
@@ -48,25 +48,25 @@ export async function maybeWorkspaceIsTrusted(ctx: ExtensionContext) {
         IS_TRUSTED = true;
     }
 
-    ctx.subscriptions.push(commands.registerCommand('c-cpp-flylint.workspace.isTrusted.toggle', async () => {
+    ctx.subscriptions.push(commands.registerCommand('lint-for-cpp.workspace.isTrusted.toggle', async () => {
         await toggleWorkspaceIsTrusted();
-        commands.executeCommand('c-cpp-flylint.analyzeWorkspace');
+        commands.executeCommand('lint-for-cpp.analyzeWorkspace');
     }));
-    ctx.subscriptions.push(commands.registerCommand('c-cpp-flylint.workspace.resetState', resetWorkspaceState));
+    ctx.subscriptions.push(commands.registerCommand('lint-for-cpp.workspace.resetState', resetWorkspaceState));
 
     if (isTrusted) {
         return;
     }
 
-    const ignored = ignoredWorkspaceConfig(workspace.getConfiguration(FLYLINT_ID), SECURITY_SENSITIVE_CONFIG);
+    const ignored = ignoredWorkspaceConfig(workspace.getConfiguration(LINTFORCPP_ID), SECURITY_SENSITIVE_CONFIG);
     if (ignored.length === 0) {
         return;
     }
-    const ignoredSettings = ignored.map((x) => `"${FLYLINT_ID}.${x}"`).join(',');
+    const ignoredSettings = ignored.map((x) => `"${LINTFORCPP_ID}.${x}"`).join(',');
     const val = await window.showWarningMessage(
         `Some workspace/folder-level settings (${ignoredSettings}) from the untrusted workspace are disabled ` +
         'by default. If this workspace is trusted, explicitly enable the workspace/folder-level settings ' +
-        'by running the "C/C++ Flylint: Toggle Workspace Trust Flag" command.',
+        'by running the "Lint for C++: Toggle Workspace Trust Flag" command.',
         'OK',
         'Trust This Workspace',
         'More Info'
@@ -135,12 +135,12 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
         documentSelector: [{ scheme: 'file', language: 'c' }, { scheme: 'file', language: 'cpp' }],
         synchronize: {
             // Synchronize the setting section "c-cpp-flylint" to the server.
-            configurationSection: FLYLINT_ID,
+            configurationSection: LINTFORCPP_ID,
             fileEvents: workspace.createFileSystemWatcher('**/.vscode/c_cpp_properties.json')
         }
     };
 
-    let settings = vscode.workspace.getConfiguration(FLYLINT_ID);
+    let settings = vscode.workspace.getConfiguration(LINTFORCPP_ID);
     let queryUrlBase = settings.get<string>('queryUrlBase');
     let webQueryMatchSet = settings.get<Array<string>>('webQueryMatchSet');
 
@@ -151,7 +151,7 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
         webQueryMatchSet = [];
     }
 
-    const client = new FlylintLanguageClient(FLYLINT_ID, 'C/C++ Flylint', serverOptions, clientOptions,
+    const client = new FlylintLanguageClient(LINTFORCPP_ID, 'Lint for C++', serverOptions, clientOptions,
         queryUrlBase, webQueryMatchSet);
 
     client.onReady()
@@ -159,7 +159,7 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
 
             // ----------------------------------------------------------------
 
-            context.subscriptions.push(commands.registerCommand('c-cpp-flylint.getLocalConfig', async (d: TextDocument) => {
+            context.subscriptions.push(commands.registerCommand('lint-for-cpp.getLocalConfig', async (d: TextDocument) => {
                 return client.sendRequest('getLocalConfig', d);
             }));
 
@@ -193,7 +193,7 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
 
             // ----------------------------------------------------------------
 
-            client.onRequest('c-cpp-flylint.cpptools.activeConfigName', async () => {
+            client.onRequest('lint-for-cpp.cpptools.activeConfigName', async () => {
                 return commands.executeCommand('cpptools.activeConfigName');
             });
 
@@ -218,5 +218,5 @@ function startLSClient(serverOptions: ServerOptions, context: ExtensionContext) 
             });
         });
 
-    context.subscriptions.push(new SettingMonitor(client, `${FLYLINT_ID}.enable`).start());
+    context.subscriptions.push(new SettingMonitor(client, `${LINTFORCPP_ID}.enable`).start());
 }

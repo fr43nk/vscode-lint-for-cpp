@@ -42,10 +42,10 @@ const JSON5Module = require('json5');
 const JSON5 = JSON5Module.default || JSON5Module;
 
 /** Identifier that is used to associate diagnostic entries with code actions. */
-export const FLYLINT_ID = 'c-cpp-flylint';
+export const LINTFORCPP_ID = 'lint-for-cpp';
 
 /** Code that is used to associate diagnostic entries with code actions. */
-export const FLYLINT_MATCH = /c-cpp-flylint/;
+export const LINTFORCPP_MATCH = /lint-for-cpp/;
 
 const substituteVariables = require('var-expansion').substituteVariables; // no types available
 
@@ -76,8 +76,8 @@ let documentVersions: Map<string, number> = new Map();
 export type InternalDiagnostic = { severity: DiagnosticSeverity, line: number, column: number, message: string, code: undefined | number | string, source: string, parseError?: any, fileName: string };
 
 namespace CommandIds {
-    export const analyzeActiveDocument: string = 'c-cpp-flylint.analyzeActiveDocument';
-    export const analyzeWorkspace: string = 'c-cpp-flylint.analyzeWorkspace';
+    export const analyzeActiveDocument: string = 'lint-for-cpp.analyzeActiveDocument';
+    export const analyzeWorkspace: string = 'lint-for-cpp.analyzeWorkspace';
 }
 
 // Clear the entire contents of TextDocument related caches.
@@ -137,7 +137,7 @@ connection.onDidChangeConfiguration(async change => {
     if (hasConfigurationCapability) {
         flushCache();
     } else {
-        globalSettings = <Settings>(change.settings[FLYLINT_ID] || defaultSettings);
+        globalSettings = <Settings>(change.settings[LINTFORCPP_ID] || defaultSettings);
     }
 
     await validateAllDocuments({ force: false });
@@ -217,7 +217,7 @@ async function getDocumentSettings(resource: string): Promise<Settings> {
     if (!result) {
         let workspaceRoot: string = await getWorkspaceRoot(resource);
         let globalSettings: Thenable<GlobalSettings> = connection.workspace.getConfiguration({ scopeUri: resource }).then(s => getMergedSettings(s, workspaceRoot));
-        result = globalSettings.then(v => v[FLYLINT_ID]);
+        result = globalSettings.then(v => v[LINTFORCPP_ID]);
         documentSettings.set(resource, result);
     }
 
@@ -248,7 +248,7 @@ async function reconfigureExtension(currentSettings: Settings, workspaceRoot: st
 export async function getCppProperties(cCppPropertiesPath: string, currentSettings: GlobalSettings, workspaceRoot: string) {
     try {
         if (fs.existsSync(cCppPropertiesPath)) {
-            const matchOn: string = await getActiveConfigurationName(currentSettings[FLYLINT_ID]);
+            const matchOn: string = await getActiveConfigurationName(currentSettings[LINTFORCPP_ID]);
             const cCppProperties: IConfigurations = JSON5.parse(fs.readFileSync(cCppPropertiesPath, 'utf8'));
             const platformConfig = cCppProperties.configurations.find(el => el.name === matchOn);
 
@@ -267,7 +267,7 @@ export async function getCppProperties(cCppPropertiesPath: string, currentSettin
                             let { value } = substituteVariables(ipath, { env: process.env });
                             let globbed_path = glob.sync(value, { cwd: workspaceRoot, dot: false, onlyDirectories: true, unique: true, absolute: true });
 
-                            if (currentSettings[FLYLINT_ID].debug) {
+                            if (currentSettings[LINTFORCPP_ID].debug) {
                                 // eslint-disable-next-line no-console
                                 console.log('Path: ' + ipath + '  VALUE: ' + value + '  Globbed is: ' + globbed_path.toString());
                             }
@@ -279,11 +279,11 @@ export async function getCppProperties(cCppPropertiesPath: string, currentSettin
                                     let acceptFile: boolean = true;
 
                                     // see if we are to accept the diagnostics upon this file.
-                                    _.each(currentSettings[FLYLINT_ID].excludeFromWorkspacePaths, (excludedPath: string) => {
+                                    _.each(currentSettings[LINTFORCPP_ID].excludeFromWorkspacePaths, (excludedPath: string) => {
                                         let substExcludedPath = substituteVariables(excludedPath, { env: process.env, ignoreErrors: true });
                                         let normalizedExcludedPath = path.normalize(substExcludedPath.value || '');
 
-                                        if (currentSettings[FLYLINT_ID].debug) {
+                                        if (currentSettings[LINTFORCPP_ID].debug) {
                                             // eslint-disable-next-line no-console
                                             console.log('Exclude Path: ' + excludedPath + '  VALUE: ' + substExcludedPath.value + '  Normalized: ' + normalizedExcludedPath);
                                         }
@@ -301,23 +301,23 @@ export async function getCppProperties(cCppPropertiesPath: string, currentSettin
                                     });
 
                                     if (acceptFile) {
-                                        if (currentSettings[FLYLINT_ID].debug) {
+                                        if (currentSettings[LINTFORCPP_ID].debug) {
                                             // eslint-disable-next-line no-console
                                             console.log('Adding path: ' + currentFilePath);
                                         }
 
-                                        currentSettings[FLYLINT_ID].includePaths =
-                                            _.uniq(currentSettings[FLYLINT_ID].includePaths.concat(currentFilePath));
+                                        currentSettings[LINTFORCPP_ID].includePaths =
+                                            _.uniq(currentSettings[LINTFORCPP_ID].includePaths.concat(currentFilePath));
                                     }
                                 } else {
                                     // file is outside of workspace root, perhaps a system folder
-                                    if (currentSettings[FLYLINT_ID].debug) {
+                                    if (currentSettings[LINTFORCPP_ID].debug) {
                                         // eslint-disable-next-line no-console
                                         console.log('Adding system path: ' + currentFilePath);
                                     }
 
-                                    currentSettings[FLYLINT_ID].includePaths =
-                                        _.uniq(currentSettings[FLYLINT_ID].includePaths.concat(currentFilePath));
+                                    currentSettings[LINTFORCPP_ID].includePaths =
+                                        _.uniq(currentSettings[LINTFORCPP_ID].includePaths.concat(currentFilePath));
                                 }
                             });
                         }
@@ -329,8 +329,8 @@ export async function getCppProperties(cCppPropertiesPath: string, currentSettin
                 }
 
                 if (platformConfig.defines.length > 0) {
-                    currentSettings[FLYLINT_ID].defines =
-                        _.uniq(currentSettings[FLYLINT_ID].defines.concat(platformConfig.defines));
+                    currentSettings[LINTFORCPP_ID].defines =
+                        _.uniq(currentSettings[LINTFORCPP_ID].defines.concat(platformConfig.defines));
                 }
             }
         }
@@ -347,9 +347,9 @@ export async function getCppProperties(cCppPropertiesPath: string, currentSettin
 
 /* istanbul ignore next */
 async function getActiveConfigurationName(_currentSettings: Settings): Promise<string> {
-    if (!hasMsCppTools) return Promise.resolve(propertiesPlatform());
+    if (!hasMsCppTools) {return Promise.resolve(propertiesPlatform());}
 
-    return RobustPromises.retry(40, 250, 1000, () => connection.sendRequest<string>('c-cpp-flylint.cpptools.activeConfigName')).then(r => {
+    return RobustPromises.retry(40, 250, 1000, () => connection.sendRequest<string>('lint-for-cpp.cpptools.activeConfigName')).then(r => {
         if (!_.isArrayLike(r) || r.length === 0) { return propertiesPlatform(); } else { return r; }
     }).catch(_e => {
         hasMsCppTools = false;
@@ -654,7 +654,7 @@ function makeDiagnostic(documentLines: string[] | null, msg: InternalDiagnostic)
     const column: number = msg.column ?? 0;
     const message: string = msg.message ?? 'Unknown error';
     const code: undefined | number | string = msg.code ?? undefined;
-    const source: string = msg.source ? `${msg.source} (${FLYLINT_ID})` : FLYLINT_ID;
+    const source: string = msg.source ? `${msg.source} (${LINTFORCPP_ID})` : LINTFORCPP_ID;
     let startColumn: number = column;
     let endColumn: number = column + 1;
 
