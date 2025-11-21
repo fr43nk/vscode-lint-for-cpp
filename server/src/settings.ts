@@ -178,5 +178,5 @@ export interface Settings {
 
 // Settings as defined in VS Code.
 export interface GlobalSettings {
-    'c-cpp-flylint': Settings;
+    'lint-for-cpp': Settings;
 }

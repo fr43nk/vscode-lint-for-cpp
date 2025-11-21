@@ -9,7 +9,7 @@ import { Lizard } from '../../server/src/linters/lizard';
 import { Settings } from '../../server/src/settings';
 import { defaultConfig } from '../mock-config';
 import { injectMockFileSystem } from '../mock-fs';
-import { FLYLINT_ID } from '../../server/src/server';
+import { LINTFORCPP_ID } from '../../server/src/server';
 
 describe('Lizard parser', () => {
     injectMockFileSystem();
@@ -18,7 +18,7 @@ describe('Lizard parser', () => {
     let linter: Linter;
 
     beforeEach(() => {
-        config = cloneDeep(defaultConfig[FLYLINT_ID]);
+        config = cloneDeep(defaultConfig[LINTFORCPP_ID]);
         linter = new Lizard(config, process.cwd());
     });
 

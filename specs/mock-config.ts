@@ -12,7 +12,7 @@ export const isWindows =
     process.env.OSTYPE === 'msys';
 
 export const defaultConfig: GlobalSettings = {
-    'c-cpp-flylint': {
+    'lint-for-cpp': {
         enable: true,
         debug: false,
         run: 'onSave',

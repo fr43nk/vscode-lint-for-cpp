@@ -450,7 +450,7 @@ The Git branch where development takes place has been renamed to "main".
 ### Changed
 
 - All of the linters will now perform an analysis according to their
-  supported capabilities and the current `c-cpp-flylint.run` setting.
+  supported capabilities and the current `lint-for-cpp.run` setting.
   This change reduces the total number of linter executions, when the
   setting is `onType` and multiple analyzers are enabled; as only
   Clang supports `onType` currently.
@@ -600,7 +600,7 @@ The Git branch where development takes place has been renamed to "main".
 ### Changed
 
 - Fixed duplicate analyzers being ran after configuration change.
-- Redefined how the `c-cpp-flylint.run` configuration option functions.
+- Redefined how the `lint-for-cpp.run` configuration option functions.
 - Always ensure a starting column is selected, even if RegExp fails.
 
 ## [0.0.1] - 2017-06-18

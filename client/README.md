@@ -1,14 +1,14 @@
 <div>
-<img src="C-Cpp-FlyLint_icon.png" style="display: inline;" align="right" width="25%" height="256" />
+<img src="../assets/lint-for-cpp-icon.png" style="display: inline;" align="right" width="25%" height="256" />
 <h1>C/C++ Advanced Lint for VS Code</h1>
 
 <div>
 
-[![Version](https://vsmarketplacebadge.apphb.com/version-short/jbenden.c-cpp-flylint.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
-[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/jbenden.c-cpp-flylint.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
-[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/jbenden.c-cpp-flylint.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
+[![Version](https://vsmarketplacebadge.apphb.com/version-short/jbenden.lint-for-cpp.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/jbenden.lint-for-cpp.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/jbenden.lint-for-cpp.svg)](https://marketplace.visualstudio.com/items?itemName=jbenden.c-cpp-flylint)
 [![Build Status](https://github.com/jbenden/vscode-c-cpp-flylint/workflows/CI/badge.svg?branch=main)](https://github.com/jbenden/vscode-c-cpp-flylint/actions)
-[![Code Climate](https://codeclimate.com/github/jbenden/vscode-c-cpp-flylint/badges/gpa.svg)](https://codeclimate.com/github/jbenden/vscode-c-cpp-flylint)
+[![Code Climate](https://codeclimate.com/github/jbenden/vscode-lint-for-cpp.badges/gpa.svg)](https://codeclimate.com/github/jbenden/vscode-c-cpp-flylint)
 
 </div>
 
@@ -45,7 +45,7 @@ analyzers; and will attempt to locate them within your `PATH`
 environment variable.
 
 If a tool is not automatically found, the appropriate
-`c-cpp-flylint.*.executable` configuration must be specified manually.
+`lint-for-cpp.*.executable` configuration must be specified manually.
 
 <details>
 <summary>Debian & Ubuntu</summary>
@@ -104,7 +104,7 @@ from the listed URLs mentioned elsewhere in this documentation.
 
 If PC-lint has been installed, be certain to use the `Flexelint`
 configuration sections, specifying the full path and filename
-of PC-lint as the `c-cpp-flylint.flexelint.executable`
+of PC-lint as the `lint-for-cpp.flexelint.executable`
 configuration option.
 
 </details>
@@ -140,8 +140,8 @@ necessary build/compiler flags, as needed by most of the linters.
 
 This extension runs a few third-party command-line tools found from the
 locations determined by the `PATH` or `Path` environment variable, and
-the settings such as `"c-cpp-flylint.clang.executable"` or
-`"c-cpp-flylint.cppcheck.executable"`. Configuring them in workspace
+the settings such as `"lint-for-cpp.clang.executable"` or
+`"lint-for-cpp.cppcheck.executable"`. Configuring them in workspace
 settings allows users to conveniently select a different set of tools
 based on project's need, but also allows attackers to run arbitrary
 binaries on your machine if they successfully convince you to open a
@@ -149,7 +149,7 @@ random repository. In order to reduce the security risk, this extension
 reads the settings from user settings, by default. If the repository can
 be trusted and workspace settings must be used, you can mark the
 workspace as a trusted workspace using the
-`"C/C++ Flylint: Toggle Workspace Trust Flag"` command.
+`"Lint for C++: Toggle Workspace Trust Flag"` command.
 
 ### Configuration Settings
 
