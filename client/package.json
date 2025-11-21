@@ -1,32 +1,31 @@
 {
-  "name": "c-cpp-flylint",
+  "name": "lint-for-cpp",
   "private": "true",
-  "displayName": "C/C++ Advanced Lint",
+  "displayName": "C/C++ Lint Adapter: Client",
   "description": "An advanced, modern, static analysis extension for C/C++ that supports a number of back-end analyzer programs.",
   "author": {
-    "name": "Joseph Benden",
-    "email": "joe@benden.us",
-    "url": "http://benden.us/"
+    "name": "Frank",
+    "email": "dev@seito.de",
+    "url": "http://seito.de"
   },
-  "publisher": "jbenden",
-  "version": "1.15.0",
+  "publisher": "Fr43nk",
+  "version": "1.0.0",
   "license": "MIT",
-  "icon": "C-Cpp-FlyLint_icon.png",
+  "icon": "assets/lint-for-cpp-icon.png",
   "galleryBanner": {
-    "color": "#303f9f",
+    "color": "#7B7B7B",
     "theme": "dark"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jbenden/vscode-c-cpp-flylint.git"
+    "url": "https://github.com/fr43nk/vscode-lint-for-cpp.git"
   },
   "bugs": {
-    "url": "https://github.com/jbenden/vscode-c-cpp-flylint/issues",
-    "email": "joe@benden.us"
+    "url": "https://github.com/fr43nk/vscode-lint-for-cpp/issues"
   },
-  "homepage": "https://github.com/jbenden/vscode-c-cpp-flylint/blob/main/README.md",
+  "homepage": "https://github.com/fr43nk/vscode-lint-for-cpp/blob/main/README.md",
   "engines": {
-    "vscode": "^1.52.0"
+    "vscode": "^1.96.0"
   },
   "devDependencies": {
     "@types/mock-fs": "^4.13.0",
